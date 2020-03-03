@@ -6,26 +6,19 @@ from datetime import datetime
 from flask import render_template
 from io import BytesIO
 import pycurl
-
-
-def navigation():
-    nav = [{'name': 'Home', 'url': '/'},
-            {'name': 'About', 'url': 'about'},
-            {'name': 'pycURL', 'url': 'pythoncurl'}]
+from eddemo.navi import nav
+from eddemo.pyc2 import output
 
 
 @app.route('/')
 def home():
     """Landing page"""
-    nav = [{'name': 'Home', 'url': 'home'},
-           {'name': 'About', 'url': 'about'},
-           {'name': 'pycURL', 'url': 'pythoncurl'}]
     return render_template(
-                           'home.html',
-                           nav=nav,
-                           title="Flask and Jinja Demo Site",
-                           description="Work examples \
-                           with flask & Jinja."
+        'home.html',
+        nav=nav,
+        title="Flask and Jinja Demo Site",
+        description="Work examples \
+         with flask & Jinja."
     )
 
 
@@ -34,6 +27,7 @@ def index():
     """Renders the home page."""
     return render_template(
         'index.html',
+        nav=nav,
         title='Home Page',
         year=datetime.now().year
     )
@@ -44,9 +38,10 @@ def contact():
     """Renders the contact page."""
     return render_template(
         'contact.html',
-        title='Contact',
+        nav=nav,
+        title='Contact me',
         year=datetime.now().year,
-        message='Your contact page.'
+        message='The following are ways to contact me'
     )
 
 
@@ -55,9 +50,10 @@ def about():
     """Renders the about page."""
     return render_template(
         'about.html',
-        title='About',
+        nav=nav,
+        title='About this site',
         year=datetime.now().year,
-        message='Your application description page.'
+        message='This site shows different applications of Flask'
     )
 
 
@@ -66,6 +62,7 @@ def userauth():
     user = {'username': 'Miguel'}
     return render_template(
         'userauth.html',
+        nav=nav,
         title='Home',
         user=user
     )
@@ -73,33 +70,13 @@ def userauth():
 
 @app.route('/pythoncurl')
 def pythoncurl():
-    """Renders the about page."""
+    """Renders the Python cURL page."""
     return render_template(
         'pythoncurl.html',
+        nav=nav,
         title='Python Curl',
         year=datetime.now().year,
-        message='Your application description page.'
+        message='Your application description page.',
+        output=output
     )
 
-
-def curlcode():
-    b_obj = BytesIO()
-    crl = pycurl.Curl()
-
-    # Set URL value
-    crl.setopt(crl.URL, 'https://wiki.python.org/moin/BeginnersGuide')
-
-    # Write bytes that are utf-8 encoded
-    crl.setopt(crl.WRITEDATA, b_obj)
-
-    # Perform a file transfer
-    crl.perform()
-
-    # End curl session
-    crl.close()
-
-    # Get the content stored in the BytesIO object (in byte characters)
-    get_body = b_obj.getvalue()
-
-    # Decode the bytes stored in get_body to HTML and print the result
-    print('Output of GET request:\n%s' % get_body.decode('utf8'))
