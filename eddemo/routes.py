@@ -5,7 +5,6 @@ from flask import current_app as app
 from datetime import datetime
 from flask import render_template
 from io import BytesIO
-import pycurl
 from eddemo.navi import nav
 from eddemo.pyc2 import output
 
